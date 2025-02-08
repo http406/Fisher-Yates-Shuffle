@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fisher-Yates Shuffle</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            body {
+                background-color: black;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            #canvas {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+                cursor: pointer;
+            }
+            #play {
+                position: absolute;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 10px 20px;
+                font-size: 16px;
+                font-weight: bold;
+                background: linear-gradient(45deg, #ff0080, #8000ff);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                box-shadow: 0 4px 10px rgba(255, 0, 128, 0.5);
+                transition: 0.3s ease;
+            }
+            #play:hover {
+                background: linear-gradient(45deg, #8000ff, #ff0080);
+                box-shadow: 0 6px 15px rgba(128, 0, 255, 0.5);
+            }
+            #infoButton {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                font-size: 20px;
+                background: white;
+                color: black;
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                box-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+            }
+            #infoPopup {
+                position: absolute;
+                top: 60px;
+                left: 20px;
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 15px;
+                border-radius: 10px;
+                width: 250px;
+                display: none;
+                box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+            }
+        </style>
+    </head>
+    <body>
+        <button id="infoButton">&#9432;</button>
+        <div id="infoPopup">
+            <strong>Fisher-Yates Shuffle</strong>
+            <p>This algorithm efficiently shuffles an array by swapping elements randomly from the end of the array to the beginning. It’s an optimal shuffling algorithm (O(n) complexity).</p><br />
+            <p>Click on the grid to stop the shuffle. Click the 'Run again' button to restart.</p>
+        </div>
+        <button id="play" onclick="Shuffle.run()">Run again</button>
+        <canvas id="canvas"></canvas>
+        
+        <script>
+            (function(e) {
+                var c = document.getElementById("canvas");
+                var ctx = c.getContext("2d");
+                var bytes, m, n, i, s, t, x, y;
+                var running = true;
+
+                function init() {
+                    s = 15; 
+                    var gridSize = 20 * s;
+                    c.width = gridSize;
+                    c.height = gridSize;
+                    m = (c.width / s) * (c.height / s);
+                    n = m;
+                    i = 0;
+                    bytes = new Uint8Array(m);
+
+                    while (i < m) {
+                        bytes[i] = i;
+                        i++;
+                    }
+                    running = true;
+                    dothedamnthing();
+                }
+
+                function render() {
+                    i = 0;
+                    while (i < m) {
+                        t = bytes[i];
+                        let hue = (t * 137.508) % 360; 
+                        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                        x = (i % (c.width / s)) * s;
+                        y = Math.floor(i / (c.width / s)) * s;
+                        ctx.fillRect(x, y, s, s);
+                        i++;
+                    }
+                    bytes = shuffle(bytes);
+                }
+
+                function shuffle(array) {
+                    i = Math.floor(Math.random() * n--);
+                    t = array[n];
+                    array[n] = array[i];
+                    array[i] = t;
+                    return array;
+                }
+
+                function dothedamnthing() {
+                    if (running) {
+                        requestAnimationFrame(dothedamnthing);
+                        render();
+                    }
+                }
+
+                c.addEventListener("click", function() {
+                    running = false;
+                });
+
+                document.getElementById("infoButton").addEventListener("click", function() {
+                    var popup = document.getElementById("infoPopup");
+                    popup.style.display = popup.style.display === "none" ? "block" : "none";
+                });
+
+                e.Shuffle = {
+                    run: init
+                }
+            })(window);
+
+            (function() {
+                var lastTime = 0;
+                var vendors = ['webkit', 'moz'];
+                for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+                    window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+                    window.cancelAnimationFrame =
+                    window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+                }
+                if (!window.requestAnimationFrame)
+                    window.requestAnimationFrame = function(callback) {
+                        var currTime = new Date().getTime();
+                        var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                        var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                        timeToCall);
+                        lastTime = currTime + timeToCall;
+                        return id;
+                    };
+                if (!window.cancelAnimationFrame)
+                    window.cancelAnimationFrame = function(id) {
+                        clearTimeout(id);
+                    };
+            }());
+
+            Shuffle.run();
+        </script>
+    </body>
+  </html>
+  
