@@ -32,7 +32,7 @@ function shuffle(array) {
 ## **3. Code Breakdown**
 ### **a) Initialize the Grid**
 ```js
-s = 20; // Cell size
+s = 15; // Cell size
 var gridSize = 20 * s;
 c.width = gridSize;
 c.height = gridSize;
@@ -40,7 +40,7 @@ m = (c.width / s) * (c.height / s);
 n = m;
 bytes = new Uint8Array(m);
 ```
-- Defines a **grid of 20×20 squares**.
+- Defines a **grid of 15×15 squares**.
 - Each block is stored in an array (`bytes`), representing colors.
 
 
