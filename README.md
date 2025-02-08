@@ -107,7 +107,7 @@ document.getElementById("infoButton").addEventListener("click", function() {
 });
 ```
 
-## **4. Summary**
+## **4. Summarizing**
 - **Fisher-Yates Shuffle** swaps elements randomly to shuffle efficiently.
 - **Canvas renders a colorful grid** that dynamically changes.
 - **Clicking stops the animation**, and **a button restarts the shuffle**.
