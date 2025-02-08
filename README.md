@@ -40,7 +40,7 @@ m = (c.width / s) * (c.height / s);
 n = m;
 bytes = new Uint8Array(m);
 ```
-- Defines a **grid of 15×15 squares**.
+- Defines a **grid of 20×15 squares**.
 - Each block is stored in an array (`bytes`), representing colors.
 
 
